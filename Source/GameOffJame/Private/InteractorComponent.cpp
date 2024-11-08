@@ -40,9 +40,11 @@ void UInteractorComponent::OnOverlap(
 	bool bFromSweep,
 	const FHitResult& sweepResult)
 {
-	if (otherActor->Implements<UInteractable>())
+	UInteractable* interactableComponent = otherActor->GetComponentByClass<UInteractable>();
+
+	if (interactableComponent)
 	{
-		OverlappedInteractable = otherActor;
+		OverlappedInteractable = interactableComponent;
 	}
 }
 
@@ -52,8 +54,9 @@ void UInteractorComponent::OnOverlapEnd(
 	UPrimitiveComponent* otherComp,
 	int32 otherBodyIndex)
 {
-	if (otherActor == OverlappedInteractable)
+	if (OverlappedInteractable && otherActor == OverlappedInteractable->GetOwner())
 	{
+		OverlappedInteractable->SetInteract(this->GetOwner(), false); // Clear so interact doesn't continue if we leave the valid range
 		OverlappedInteractable = nullptr;
 	}
 }
@@ -62,9 +65,9 @@ bool UInteractorComponent::SetInteract(bool interacting)
 {
 	bool result = false;
 
-	if (OverlappedInteractable && OverlappedInteractable->Implements<UInteractable>() && IInteractable::Execute_CanInteract(OverlappedInteractable, this->GetOwner()))
+	if (OverlappedInteractable)
 	{
-		IInteractable::Execute_SetInteract(OverlappedInteractable, this->GetOwner(), interacting);
+		OverlappedInteractable->SetInteract(this->GetOwner(), interacting);
 	}
 
 	return result;

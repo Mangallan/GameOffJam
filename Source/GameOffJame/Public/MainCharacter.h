@@ -8,6 +8,7 @@
 #include "MainCharacter.generated.h"
 
 class UInteractorComponent;
+class UCameraComponent;
 
 UCLASS()
 class GAMEOFFJAME_API AMainCharacter : public ACharacter, public IControllable
@@ -28,8 +29,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float BaseLookSpeed = 1.f;
 
-	UPROPERTY(EditAnywhere, Category = "Interaction", meta = (AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess="true"))
 	UInteractorComponent* InteractorComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* CameraComponent;
 
 public:	
 	// Called every frame

@@ -36,8 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveInput;
 
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookInput;
+	// Disabled for fixed camera. Can change later
+	//UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* LookInput;
 
 	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* RiseInput;

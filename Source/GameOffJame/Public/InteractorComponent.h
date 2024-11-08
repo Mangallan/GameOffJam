@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "InteractorComponent.generated.h"
 
+class UInteractable;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GAMEOFFJAME_API UInteractorComponent : public UActorComponent
@@ -20,6 +21,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	void OnOverlap(
 		UPrimitiveComponent* overlappedComponent,
 		AActor* otherActor,
@@ -28,13 +30,14 @@ protected:
 		bool bFromSweep,
 		const FHitResult& sweepResult);
 
+	UFUNCTION()
 	void OnOverlapEnd(
 		UPrimitiveComponent* overlappedComponent,
 		AActor* otherActor,
 		UPrimitiveComponent* otherComp,
 		int32 otherBodyIndex);
 
-	AActor* OverlappedInteractable;
+	UInteractable* OverlappedInteractable;
 
 public:	
 	UFUNCTION(BlueprintCallable, Category = Interact)

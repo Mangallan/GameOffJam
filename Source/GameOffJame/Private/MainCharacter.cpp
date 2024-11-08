@@ -5,6 +5,7 @@
 
 #include "Interactable.h"
 #include "InteractorComponent.h"
+#include "Camera\CameraComponent.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -13,6 +14,10 @@ AMainCharacter::AMainCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>("Interactor");
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	CameraComponent->SetupAttachment(RootComponent);
+	CameraComponent->bUsePawnControlRotation = false;
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +43,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMainCharacter::Move_Implementation(FVector2D inputDirection)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Move"))
 	if (Controller)
 	{
 		FRotator yawRotation(0.0f, Controller->GetControlRotation().Yaw, 0.0f);
@@ -61,7 +65,6 @@ void AMainCharacter::Interact_Implementation(bool interacting)
 {
 	if (InteractorComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Interacting"))
 		InteractorComponent->SetInteract(interacting);
 	}
 }

@@ -3,33 +3,60 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
+#include "Components/ActorComponent.h"
 #include "Interactable.generated.h"
-
-// This class does not need to be modified.
-UINTERFACE(Blueprintable, MinimalAPI)
-class UInteractable : public UInterface
-{
-	GENERATED_BODY()
-};
 
 /**
  * 
  */
-class GAMEOFFJAME_API IInteractable
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class GAMEOFFJAME_API UInteractable : public UActorComponent
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
+	bool InteractionRequiresHold = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess="true"))
+	float InteractionTimeRequired = 0.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
+	bool IsInteracting = false;
+
+	FTimerHandle InteractTimerHandle;
+
+	DECLARE_DYNAMIC_DELEGATE_TwoParams(FSetInteractDelegate, AActor*, interactor, bool, setInteract);
+	DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FCanInteractDelegate);
+	DECLARE_DYNAMIC_DELEGATE(FInteractionCompleteDelegate);
+
+	FSetInteractDelegate SetInteractBinding;
+	FCanInteractDelegate CanInteractBinding;
+	FInteractionCompleteDelegate CompleteInteractBinding;
+
 public:
-	float InteractionTime = 0.0f;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interaction")
-	void SetInteract(AActor* interactor, bool isInteracting);
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void BindSetInteractFunction(UObject* bindee, FName functionName);
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interaction")
-	bool CanInteract(AActor* interactor);
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void SetInteract(AActor* interactor, bool setInteracting);
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interaction")
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void SetInteractDefault(AActor* interactor, bool setInteracting);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void BindCanInteractFunction(UObject* bindee, FName functionName);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	bool CanInteract();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	float GetInteractionElapsedTime();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void BindInteractionCompleteFunction(UObject* bindee, FName functionName);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void InteractionComplete();
 };

@@ -33,7 +33,7 @@ void AInputController::SetupInputs()
 	if (inputComponent)
 	{
 		inputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &AInputController::SendMoveInput);
-		inputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &AInputController::SendLookInput);
+		//inputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &AInputController::SendLookInput);
 		inputComponent->BindAction(RiseInput, ETriggerEvent::Triggered, this, &AInputController::SendRiseInput);
 		inputComponent->BindAction(FallInput, ETriggerEvent::Triggered, this, &AInputController::SendFallInput);
 		inputComponent->BindAction(InteractInput, ETriggerEvent::Triggered, this, &AInputController::SendInteractInput);
