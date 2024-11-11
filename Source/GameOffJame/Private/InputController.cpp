@@ -17,7 +17,6 @@ void AInputController::BeginPlay()
 	if (enhancedInputSubsystem)
 	{
 		enhancedInputSubsystem->AddMappingContext(DefaultMappingContext, 0);
-
 		SetupInputs();
 	}
 	else
@@ -30,6 +29,7 @@ void AInputController::SetupInputs()
 {
 	UEnhancedInputComponent* inputComponent = Cast<UEnhancedInputComponent>(InputComponent);
 
+
 	if (inputComponent)
 	{
 		inputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &AInputController::SendMoveInput);
@@ -37,6 +37,7 @@ void AInputController::SetupInputs()
 		inputComponent->BindAction(RiseInput, ETriggerEvent::Triggered, this, &AInputController::SendRiseInput);
 		inputComponent->BindAction(FallInput, ETriggerEvent::Triggered, this, &AInputController::SendFallInput);
 		inputComponent->BindAction(InteractInput, ETriggerEvent::Triggered, this, &AInputController::SendInteractInput);
+		inputComponent->BindAction(AnyInput, ETriggerEvent::Triggered, this, &AInputController::UpdateLastDeviceUsed);
 	}
 }
 
@@ -89,4 +90,9 @@ void AInputController::SendInteractInput(const FInputActionValue& Value)
 	{
 		IControllable::Execute_Interact(controlledPawn, Value.Get<bool>());
 	}
+}
+
+void AInputController::UpdateLastDeviceUsed(const FInputActionValue& Value)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Any pressed"))
 }

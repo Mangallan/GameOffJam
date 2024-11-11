@@ -27,7 +27,7 @@ protected:
 	FTimerHandle InteractTimerHandle;
 
 	DECLARE_DYNAMIC_DELEGATE_TwoParams(FSetInteractDelegate, AActor*, interactor, bool, setInteract);
-	DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FCanInteractDelegate);
+	DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FCanInteractDelegate, AActor*, interactor);
 	DECLARE_DYNAMIC_DELEGATE(FInteractionCompleteDelegate);
 
 	FSetInteractDelegate SetInteractBinding;
@@ -49,7 +49,7 @@ public:
 	void BindCanInteractFunction(UObject* bindee, FName functionName);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
-	bool CanInteract();
+	bool CanInteract(AActor* interactor);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	float GetInteractionElapsedTime();

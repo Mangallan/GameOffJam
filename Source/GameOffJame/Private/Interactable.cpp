@@ -15,7 +15,7 @@ void UInteractable::SetInteract(AActor* interactor, bool setInteracting)
 
 void UInteractable::SetInteractDefault(AActor* interactor, bool setInteracting)
 {
-	if (setInteracting && CanInteract())
+	if (setInteracting && CanInteract(interactor))
 	{
 		if (InteractionRequiresHold)
 		{
@@ -51,13 +51,13 @@ void UInteractable::BindInteractionCompleteFunction(UObject* bindee, FName funct
 	CompleteInteractBinding.BindUFunction(bindee, functionName);
 }
 
-bool UInteractable::CanInteract()
+bool UInteractable::CanInteract(AActor* interactor)
 {
 	bool result = true;
 
 	if (CanInteractBinding.IsBound())
 	{
-		result = CanInteractBinding.Execute();
+		result = CanInteractBinding.Execute(interactor);
 	}
 
 	return result;
