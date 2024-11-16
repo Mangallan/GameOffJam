@@ -18,9 +18,13 @@ class GAMEOFFJAME_API AInputController : public APlayerController
 {
 	GENERATED_BODY()
 
+private:
+	APawn* TrackedPawn;
+
 protected:
 
 	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* pawn) override;
 
 	void SetupInputs();
 

@@ -6,6 +6,7 @@
 #include "Interactable.h"
 #include "InteractorComponent.h"
 #include "Camera\CameraComponent.h"
+#include "DialogueConsumer.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -18,6 +19,8 @@ AMainCharacter::AMainCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	CameraComponent->SetupAttachment(RootComponent);
 	CameraComponent->bUsePawnControlRotation = false;
+
+	DialogueConsumerComponent = CreateDefaultSubobject<UDialogueConsumer>("Dialogue Consumer");
 }
 
 // Called when the game starts or when spawned
@@ -63,8 +66,15 @@ void AMainCharacter::Look_Implementation(FVector2D inputRotation)
 
 void AMainCharacter::Interact_Implementation(bool interacting)
 {
-	if (InteractorComponent)
+	if (InteractorComponent && !(DialogueConsumerComponent && DialogueConsumerComponent->HasActiveDialogue()))
 	{
 		InteractorComponent->SetInteract(interacting);
 	}
+	// Little hacky to handle dialogue here as well but uhhhhhhh game jam deadlines amirite?
+	else if (interacting && DialogueConsumerComponent && DialogueConsumerComponent->HasActiveDialogue())
+	{
+		DialogueConsumerComponent->ConsumeDialogue(); // Starting dialogue is handled by the producer, who themselves is likely just an interactable. 
+	}
+
+
 }

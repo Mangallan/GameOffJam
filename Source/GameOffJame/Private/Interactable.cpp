@@ -17,6 +17,8 @@ void UInteractable::SetInteractDefault(AActor* interactor, bool setInteracting)
 {
 	if (setInteracting && CanInteract(interactor))
 	{
+		ActiveInteractor = interactor;
+
 		if (InteractionRequiresHold)
 		{
 			if (InteractionTimeRequired <= 0.0f) { UE_LOG(LogTemp, Warning, TEXT("Time is not set for held interaction!")) }
@@ -30,6 +32,7 @@ void UInteractable::SetInteractDefault(AActor* interactor, bool setInteracting)
 	}	
 	else
 	{
+		ActiveInteractor = nullptr;
 		GetWorld()->GetTimerManager().ClearTimer(InteractTimerHandle);
 	}
 
@@ -72,7 +75,7 @@ void UInteractable::InteractionComplete()
 {
 	if (CompleteInteractBinding.IsBound())
 	{
-		CompleteInteractBinding.Execute();
+		CompleteInteractBinding.Execute(ActiveInteractor);
 	}
 	else
 	{

@@ -24,11 +24,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Interaction", meta = (AllowPrivateAccess = "true"))
 	bool IsInteracting = false;
 
+	AActor* ActiveInteractor;
+
 	FTimerHandle InteractTimerHandle;
 
 	DECLARE_DYNAMIC_DELEGATE_TwoParams(FSetInteractDelegate, AActor*, interactor, bool, setInteract);
 	DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FCanInteractDelegate, AActor*, interactor);
-	DECLARE_DYNAMIC_DELEGATE(FInteractionCompleteDelegate);
+	DECLARE_DYNAMIC_DELEGATE_OneParam(FInteractionCompleteDelegate, AActor*, interactor);
 
 	FSetInteractDelegate SetInteractBinding;
 	FCanInteractDelegate CanInteractBinding;

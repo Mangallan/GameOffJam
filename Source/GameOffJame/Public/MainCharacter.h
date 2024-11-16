@@ -9,6 +9,7 @@
 
 class UInteractorComponent;
 class UCameraComponent;
+class UDialogueConsumer;
 
 UCLASS()
 class GAMEOFFJAME_API AMainCharacter : public ACharacter, public IControllable
@@ -34,6 +35,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialogue", meta = (AllowPrivateAccess = "true"))
+	UDialogueConsumer* DialogueConsumerComponent;
 
 public:	
 	// Called every frame

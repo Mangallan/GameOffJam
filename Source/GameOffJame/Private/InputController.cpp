@@ -25,6 +25,12 @@ void AInputController::BeginPlay()
 	}
 }
 
+void AInputController::OnPossess(APawn* pawn)
+{
+	Super::OnPossess(pawn);
+	TrackedPawn = pawn;
+}
+
 void AInputController::SetupInputs()
 {
 	UEnhancedInputComponent* inputComponent = Cast<UEnhancedInputComponent>(InputComponent);
@@ -44,51 +50,41 @@ void AInputController::SetupInputs()
 // There's gotta be a better way than repeating function defs
 void AInputController::SendMoveInput(const FInputActionValue& Value)
 {
-	APawn* controlledPawn = GetPawn();
-
-	if (controlledPawn && controlledPawn->Implements<UControllable>()) //Uh, should this be U or I?
+	if (TrackedPawn && TrackedPawn->Implements<UControllable>()) //Uh, should this be U or I?
 	{
-		IControllable::Execute_Move(controlledPawn, Value.Get<FVector2D>());
+		IControllable::Execute_Move(TrackedPawn, Value.Get<FVector2D>());
 	}
 }
 
 void  AInputController::SendLookInput(const FInputActionValue& Value)
 {
-	APawn* controlledPawn = GetPawn();
-
-	if (controlledPawn && controlledPawn->Implements<UControllable>())
+	if (TrackedPawn && TrackedPawn->Implements<UControllable>())
 	{
-		IControllable::Execute_Look(controlledPawn, Value.Get<FVector2D>());
+		IControllable::Execute_Look(TrackedPawn, Value.Get<FVector2D>());
 	}
 }
 
 void AInputController::SendRiseInput(const FInputActionValue& Value)
 {
-	APawn* controlledPawn = GetPawn();
-
-	if (controlledPawn && controlledPawn->Implements<UControllable>())
+	if (TrackedPawn && TrackedPawn->Implements<UControllable>())
 	{
-		IControllable::Execute_Rise(controlledPawn, Value.Get<bool>());
+		IControllable::Execute_Rise(TrackedPawn, Value.Get<bool>());
 	}
 }
 
 void AInputController::SendFallInput(const FInputActionValue& Value)
 {
-	APawn* controlledPawn = GetPawn();
-
-	if (controlledPawn && controlledPawn->Implements<UControllable>())
+	if (TrackedPawn && TrackedPawn->Implements<UControllable>())
 	{
-		IControllable::Execute_Fall(controlledPawn, Value.Get<bool>());
+		IControllable::Execute_Fall(TrackedPawn, Value.Get<bool>());
 	}
 }
 
 void AInputController::SendInteractInput(const FInputActionValue& Value)
 {
-	APawn* controlledPawn = GetPawn();
-
-	if (controlledPawn && controlledPawn->Implements<UControllable>())
+	if (TrackedPawn && TrackedPawn->Implements<UControllable>())
 	{
-		IControllable::Execute_Interact(controlledPawn, Value.Get<bool>());
+		IControllable::Execute_Interact(TrackedPawn, Value.Get<bool>());
 	}
 }
 
