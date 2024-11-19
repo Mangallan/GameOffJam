@@ -28,7 +28,7 @@ void UDialogueConsumer::BeginPlay()
 void UDialogueConsumer::StartDialogue(UDialogueProducer* producer)
 {
 	DialogueProducer = producer;
-	DialogueStartedEvent.Broadcast();
+	DialogueStartedEvent.Broadcast(producer);
 	ConsumeDialogue();
 }
 

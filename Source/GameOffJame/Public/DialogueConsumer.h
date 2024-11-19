@@ -17,7 +17,7 @@ public:
 	// Sets default values for this component's properties
 	UDialogueConsumer();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDialogueStarted);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueStarted, UDialogueProducer*, dialogueProducer);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueConsumed, FText, dialogue);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDialogueEnded);
 
