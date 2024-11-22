@@ -46,6 +46,8 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess="true"))
 	UStringTable* DialogueData;
 
+	FGetNextDialogueTreeSignature GetNextDialogueTreeDelegate;
+
 public:	
 
 	UFUNCTION(BlueprintCallable, Category = Dialogue)
@@ -55,9 +57,7 @@ public:
 	FText GetNextLine();
 
 	UFUNCTION(BlueprintCallable, Category = Dialogue)
-	void BindGetNextDialogueTreeFunction(UObject* bindee, FName functionName);
-
-	FGetNextDialogueTreeSignature OnGetNextDialogueTree;
+	void BindGetNextDialogueTreeFunction(FGetNextDialogueTreeSignature function);
 
 	UFUNCTION(BlueprintCallable, Category = Dialogue)
 	static FString StripIndexFromDialogueKey(FString key);

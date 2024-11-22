@@ -51,10 +51,10 @@ void UDialogueProducer::InitiateDialogue(AActor* initiator)
 {
 	UDialogueConsumer* dialogueConsumer = initiator->FindComponentByClass<UDialogueConsumer>();
 
-	if (dialogueConsumer && OnGetNextDialogueTree.IsBound())
+	if (dialogueConsumer && GetNextDialogueTreeDelegate.IsBound())
 	{
 		CurrentDialogueIndex = 0;
-		ActiveDialogue = OnGetNextDialogueTree.Execute();
+		ActiveDialogue = GetNextDialogueTreeDelegate.Execute();
 		dialogueConsumer->StartDialogue(this);
 	}
 }
@@ -84,9 +84,9 @@ FText UDialogueProducer::GetNextLine()
 	return result;
 }
 
-void UDialogueProducer::BindGetNextDialogueTreeFunction(UObject* bindee, FName functionName)
+void UDialogueProducer::BindGetNextDialogueTreeFunction(FGetNextDialogueTreeSignature function)
 {
-	OnGetNextDialogueTree.BindUFunction(bindee, functionName);
+	GetNextDialogueTreeDelegate = function;
 }
 
 FString UDialogueProducer::StripIndexFromDialogueKey(FString key)

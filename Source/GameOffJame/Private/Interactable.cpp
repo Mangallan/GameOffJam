@@ -39,19 +39,19 @@ void UInteractable::SetInteractDefault(AActor* interactor, bool setInteracting)
 	IsInteracting = setInteracting;
 }
 
-void UInteractable::BindSetInteractFunction(UObject* bindee, FName functionName)
+void UInteractable::BindSetInteractFunction(FSetInteractDelegate function)
 {
-	SetInteractBinding.BindUFunction(bindee, functionName);
+	SetInteractBinding = function;
 }
 
-void UInteractable::BindCanInteractFunction(UObject* bindee, FName functionName)
+void UInteractable::BindCanInteractFunction(FCanInteractDelegate function)
 {
-	CanInteractBinding.BindUFunction(bindee, functionName);
+	CanInteractBinding = function;
 }
 
-void UInteractable::BindInteractionCompleteFunction(UObject* bindee, FName functionName)
+void UInteractable::BindInteractionCompleteFunctionToMulticast(FInteractionCompleteDelegate function)
 {
-	CompleteInteractBinding.BindUFunction(bindee, functionName);
+	CompleteInteractMulticast.Add(function);
 }
 
 bool UInteractable::CanInteract(AActor* interactor)
@@ -73,9 +73,9 @@ float UInteractable::GetInteractionElapsedTime()
 
 void UInteractable::InteractionComplete()
 {
-	if (CompleteInteractBinding.IsBound())
+	if (CompleteInteractMulticast.IsBound())
 	{
-		CompleteInteractBinding.Execute(ActiveInteractor);
+		CompleteInteractMulticast.Broadcast(ActiveInteractor);
 	}
 	else
 	{

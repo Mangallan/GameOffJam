@@ -31,15 +31,16 @@ protected:
 	DECLARE_DYNAMIC_DELEGATE_TwoParams(FSetInteractDelegate, AActor*, interactor, bool, setInteract);
 	DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FCanInteractDelegate, AActor*, interactor);
 	DECLARE_DYNAMIC_DELEGATE_OneParam(FInteractionCompleteDelegate, AActor*, interactor);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInteractionCompleteEvent, AActor*, interactor);
 
 	FSetInteractDelegate SetInteractBinding;
 	FCanInteractDelegate CanInteractBinding;
-	FInteractionCompleteDelegate CompleteInteractBinding;
+	FInteractionCompleteEvent CompleteInteractMulticast;
 
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
-	void BindSetInteractFunction(UObject* bindee, FName functionName);
+	void BindSetInteractFunction(FSetInteractDelegate function);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void SetInteract(AActor* interactor, bool setInteracting);
@@ -48,7 +49,7 @@ public:
 	void SetInteractDefault(AActor* interactor, bool setInteracting);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
-	void BindCanInteractFunction(UObject* bindee, FName functionName);
+	void BindCanInteractFunction(FCanInteractDelegate function);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	bool CanInteract(AActor* interactor);
@@ -57,7 +58,7 @@ public:
 	float GetInteractionElapsedTime();
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
-	void BindInteractionCompleteFunction(UObject* bindee, FName functionName);
+	void BindInteractionCompleteFunctionToMulticast(FInteractionCompleteDelegate function);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void InteractionComplete();
