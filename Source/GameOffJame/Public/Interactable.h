@@ -62,4 +62,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void InteractionComplete();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void UnBindFunctions();
 };

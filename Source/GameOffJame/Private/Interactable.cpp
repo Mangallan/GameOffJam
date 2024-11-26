@@ -84,3 +84,9 @@ void UInteractable::InteractionComplete()
 
 	SetInteract(nullptr, false); // Reset interact state
 }
+
+void UInteractable::UnBindFunctions()
+{
+	SetInteractBinding.Unbind();
+	CanInteractBinding.Unbind();
+}

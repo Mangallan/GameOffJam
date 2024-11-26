@@ -10,6 +10,7 @@
 class UInteractorComponent;
 class UCameraComponent;
 class UDialogueConsumer;
+class UInventorySystem;
 
 UCLASS()
 class GAMEOFFJAME_API AMainCharacter : public ACharacter, public IControllable
@@ -39,6 +40,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialogue", meta = (AllowPrivateAccess = "true"))
 	UDialogueConsumer* DialogueConsumerComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	UInventorySystem* InventorySystemComponent;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -52,4 +56,6 @@ public:
 	void Look_Implementation(FVector2D inputRotation) override;
 
 	void Interact_Implementation(bool interacting) override;
+
+	void ToggleInventory_Implementation(bool interacting) override;
 };

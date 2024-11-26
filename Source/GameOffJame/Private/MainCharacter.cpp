@@ -7,6 +7,7 @@
 #include "InteractorComponent.h"
 #include "Camera\CameraComponent.h"
 #include "DialogueConsumer.h"
+#include "Inventory/InventorySystem.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -21,6 +22,8 @@ AMainCharacter::AMainCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	DialogueConsumerComponent = CreateDefaultSubobject<UDialogueConsumer>("Dialogue Consumer");
+
+	InventorySystemComponent = CreateDefaultSubobject<UInventorySystem>("Inventory System");
 }
 
 // Called when the game starts or when spawned
@@ -77,4 +80,12 @@ void AMainCharacter::Interact_Implementation(bool interacting)
 	}
 
 
+}
+
+void AMainCharacter::ToggleInventory_Implementation(bool interacting)
+{
+	if (InventorySystemComponent)
+	{
+		InventorySystemComponent->ToggleInventory();
+	}
 }

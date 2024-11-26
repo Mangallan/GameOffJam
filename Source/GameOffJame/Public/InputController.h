@@ -34,6 +34,7 @@ protected:
 	void SendFallInput(const FInputActionValue& Value);
 	void SendInteractInput(const FInputActionValue& Value);
 	void UpdateLastDeviceUsed(const FInputActionValue& Value);
+	void SendInventoryInput(const FInputActionValue& Value);
 
 	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess="true"))
 	UInputMappingContext* DefaultMappingContext;
@@ -56,6 +57,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AnyInput;
+
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InventoryInput;
 	
 public:
 
