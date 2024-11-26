@@ -52,4 +52,7 @@ public:
 	void Look_Implementation(FVector2D inputRotation) override;
 
 	void Interact_Implementation(bool interacting) override;
+
+	UFUNCTION(BlueprintCallable)
+	void RotationLerp(float delta, FVector oldLocation, FVector oldVelocity);
 };
