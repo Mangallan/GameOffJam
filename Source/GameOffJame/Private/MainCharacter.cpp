@@ -7,6 +7,7 @@
 #include "InteractorComponent.h"
 #include "Camera\CameraComponent.h"
 #include "DialogueConsumer.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Inventory/InventorySystem.h"
 
 // Sets default values
@@ -22,6 +23,8 @@ AMainCharacter::AMainCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	DialogueConsumerComponent = CreateDefaultSubobject<UDialogueConsumer>("Dialogue Consumer");
+
+	//OnCharacterMovementUpdated.AddDynamic(this, &AMainCharacter::RotationLerp); Not working, not sure why.
 
 	InventorySystemComponent = CreateDefaultSubobject<UInventorySystem>("Inventory System");
 }
@@ -78,8 +81,33 @@ void AMainCharacter::Interact_Implementation(bool interacting)
 	{
 		DialogueConsumerComponent->ConsumeDialogue(); // Starting dialogue is handled by the producer, who themselves is likely just an interactable. 
 	}
+}
+
+void AMainCharacter::RotationLerp(float delta, FVector oldLocation, FVector oldVelocity)
+{
+	FVector newVel = GetVelocity().GetSafeNormal();
+	USkeletalMeshComponent* mesh = GetMesh();
+	UE_LOG(LogTemp, Warning, TEXT("Vel: %s"), *newVel.ToCompactString())
+
+	if (newVel.Length() > 0.01f)
+	{
+		// Character meshes are facing 90 degrees the wrong way, gotta account
+		FRotator yawRotation(0.0f, mesh->GetRelativeRotation().Yaw + 90, 0.0f);
+		FRotationMatrix rotMatrix(yawRotation);
+		FVector forward(rotMatrix.GetUnitAxis(EAxis::X));
+
+		UE_LOG(LogTemp, Warning, TEXT("Forward: %s"), *forward.ToCompactString())
 
 
+		FVector rotationV = FMath::VInterpNormalRotationTo(forward, newVel, delta, 360);
+		FRotator newRot = UKismetMathLibrary::MakeRotFromX(rotationV);
+		newRot.Yaw -= 90;
+
+		UE_LOG(LogTemp, Warning, TEXT("interp: %s"), *rotationV.ToCompactString())
+		UE_LOG(LogTemp, Warning, TEXT("rot: %s"), *newRot.ToCompactString())
+
+		mesh->SetRelativeRotation(newRot);
+	}
 }
 
 void AMainCharacter::ToggleInventory_Implementation(bool interacting)

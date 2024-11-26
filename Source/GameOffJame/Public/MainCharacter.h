@@ -57,5 +57,8 @@ public:
 
 	void Interact_Implementation(bool interacting) override;
 
+	UFUNCTION(BlueprintCallable)
+	void RotationLerp(float delta, FVector oldLocation, FVector oldVelocity);
+
 	void ToggleInventory_Implementation(bool interacting) override;
 };
