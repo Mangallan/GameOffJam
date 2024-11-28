@@ -4,6 +4,9 @@
 #include "Item.h"
 #include "Interactable.h"
 #include "Inventory/InventorySystem.h"
+#include "GameplayMode.h"
+#include "MainGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UItem::UItem()
@@ -33,20 +36,27 @@ void UItem::PickupItem(AActor* interactor)
 {
 	UInventorySystem* inventory = interactor->GetComponentByClass<UInventorySystem>();
 
-	if (inventory == nullptr || ItemId.DataTable == nullptr)
+	UMainGameInstance* gameManager = Cast<UMainGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	if (gameManager == nullptr || gameManager->ItemsData == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0F, FColor::Emerald, TEXT("1"));
+		return;
+	}
+
+	if (inventory == nullptr)
+	{
 		return;
 	}
 
 	const FString& contextString = TEXT("test");
-	FItemData* data = ItemId.GetRow<FItemData>(contextString);
+
+	FItemData* data = gameManager->ItemsData->FindRow<FItemData>(ItemId, contextString);
 
 	if (data)
 	{
 		bool isSuccessful;
 		int quantityRemaining;
-		inventory->AddToInventory(ItemId.RowName, _quantity, isSuccessful, quantityRemaining);
+		inventory->AddToInventory(ItemId, _quantity, isSuccessful, quantityRemaining);
 
 		if (isSuccessful)
 		{
@@ -57,6 +67,10 @@ void UItem::PickupItem(AActor* interactor)
 			}
 			GetOwner()->Destroy();
 		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, FString::Printf(TEXT("Item %s does not exist in the item data table."), *ItemId.ToString()));
 	}
 }
 

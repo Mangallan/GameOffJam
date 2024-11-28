@@ -5,6 +5,9 @@
 
 #include "Camera/PlayerCameraManager.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Blueprint/UserWidget.h"
+#include "MainGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UInventorySystem::UInventorySystem()
@@ -22,8 +25,7 @@ UInventorySystem::UInventorySystem()
 void UInventorySystem::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Content.SetNum(_inventorySize);
+	LoadInventory();
 }
 
 void UInventorySystem::AddToInventory(FName itemId, int quantity, bool& isSuccessful, int& quantityRemaining)
@@ -59,6 +61,7 @@ void UInventorySystem::AddToInventory(FName itemId, int quantity, bool& isSucces
 	}
 
 	quantityRemaining = FMath::Max(quantityRemaining, 0);
+	Update();
 }
 
 void UInventorySystem::RemoveFromInventory(int index, bool removeAll, bool isConsumed)
@@ -94,6 +97,24 @@ void UInventorySystem::RemoveFromInventory(int index, bool removeAll, bool isCon
 	}
 }
 
+void UInventorySystem::QueryInventory(FName itemId, int quantity, bool& found)
+{
+	int runningTotal{};
+	for (FSlotData data : Content)
+	{
+		if (itemId == data.ItemId)
+		{
+			runningTotal += data.Quantity;
+		}
+	}
+
+	found = runningTotal >= quantity;
+	if (found)
+	{
+		// Return wanted queries.
+	}
+}
+
 void UInventorySystem::ToggleInventory()
 {
 	_isInventoryOpened = !_isInventoryOpened;
@@ -125,13 +146,14 @@ void UInventorySystem::TransferSlots(int sourceIndex, UInventorySystem* sourceCo
 		}
 
 		sourceComponent->InventoryUpdatedEvent.Broadcast();
-		InventoryUpdatedEvent.Broadcast();
+		Update();
 	}
 }
 
 void UInventorySystem::Update()
 {
 	InventoryUpdatedEvent.Broadcast();
+	SaveInventory();
 }
 
 void UInventorySystem::FindSlot(FName itemId, bool& hasFoundSlot, int& index, int& slotRemainingQuantity)
@@ -216,11 +238,6 @@ void UInventorySystem::DropItem(FName itemId, int quantity)
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
 
-		TSubclassOf<AActor> e = data.ItemClass;
-		if (e)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Not null"));
-		}
 		AActor* item = GetWorld()->SpawnActor<AActor>(data.ItemClass, GetDropLocation(), Rotation, SpawnInfo);
 	}
 
@@ -236,13 +253,10 @@ FItemData UInventorySystem::GetItemData(FName itemId)
 
 		if (data)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Found an item"));
 			return *data;
 		}
 	}
 
-
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Failed"));
 	return FItemData();
 }
 
@@ -252,5 +266,37 @@ FVector UInventorySystem::GetDropLocation()
 
 	FVector forwardLocation = GetOwner()->GetActorForwardVector();
 	return actorLocation + forwardLocation;
+}
+
+void UInventorySystem::SaveInventory()
+{
+	UMainGameInstance* gameManager = Cast<UMainGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	if (gameManager == nullptr)
+	{
+		return;
+	}
+
+	gameManager->InventoryContent = Content;
+}
+
+void UInventorySystem::LoadInventory()
+{
+	UMainGameInstance* gameManager = Cast<UMainGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	if (gameManager == nullptr)
+	{
+		return;
+	}
+
+	TArray<FSlotData> loadedContent = gameManager->InventoryContent;
+	if (loadedContent.Num() == 0)
+	{
+		Content.SetNum(_inventorySize);
+	}
+	else
+	{
+		Content = loadedContent;
+	}
 }
 

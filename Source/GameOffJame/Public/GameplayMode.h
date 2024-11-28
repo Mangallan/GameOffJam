@@ -13,7 +13,7 @@ UCLASS()
 class GAMEOFFJAME_API AGameplayMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 private:
 	virtual void BeginPlay() override;
 

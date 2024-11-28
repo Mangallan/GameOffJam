@@ -22,7 +22,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Item", BlueprintReadOnly)
-	FDataTableRowHandle ItemId;
+	FName ItemId;
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

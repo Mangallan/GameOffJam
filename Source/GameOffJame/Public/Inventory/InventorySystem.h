@@ -74,6 +74,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveFromInventory(int index, bool removeAll, bool isConsumed);
 
+	UFUNCTION(BlueprintPure)
+	void QueryInventory(FName itemId, int quantity, bool& found);
+
+	UFUNCTION(BlueprintCallable)
 	void ToggleInventory();
 
 	UFUNCTION(BlueprintCallable)
@@ -86,7 +90,6 @@ private:
 	int _inventorySize = 16;
 
 	UPROPERTY(EditDefaultsOnly)
-
 	UDataTable* _itemsDataTable;
 
 	bool _isInventoryOpened;
@@ -108,4 +111,7 @@ private:
 	FItemData GetItemData(FName itemId);
 
 	FVector GetDropLocation();
+
+	void SaveInventory();
+	void LoadInventory();
 };
