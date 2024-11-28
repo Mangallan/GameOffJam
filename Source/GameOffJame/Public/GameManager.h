@@ -17,4 +17,10 @@ class GAMEOFFJAME_API UGameManager : public UGameInstance
 public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Transitions")
 	FString CurrentTransitionId;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Inventory System")
+	TArray<struct FSlotData> InventoryContent;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Inventory System")
+	TArray<int> HotbarContent;
 };

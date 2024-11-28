@@ -43,4 +43,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Controls")
 	void Interact(bool isPressed);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Controls")
+	void ToggleInventory(bool isPressed);
+
 };

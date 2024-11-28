@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+
+#include "Inventory/InventorySystem.h"
+
 #include "MainGameInstance.generated.h"
 
 class UObjectiveManager;
@@ -18,6 +21,18 @@ class GAMEOFFJAME_API UMainGameInstance : public UGameInstance
 
 public:
 	UMainGameInstance();
+
+	UPROPERTY(VisibleAnywhere, Category = "Transitions")
+	FString CurrentTransitionId;
+
+	UPROPERTY(VisibleAnywhere, Category = "Inventory System")
+	TArray<FSlotData> InventoryContent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory System")
+	TArray<int> HotbarContent;
+
+	UPROPERTY(EditAnywhere, Category = "Inventory System")
+	UDataTable* ItemsData;
 
 protected:
 

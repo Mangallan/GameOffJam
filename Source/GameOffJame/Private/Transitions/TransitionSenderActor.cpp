@@ -2,7 +2,7 @@
 
 
 #include "Transitions/TransitionSenderActor.h"
-#include "GameManager.h"
+#include "MainGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
 #include "MainCharacter.h"
@@ -23,7 +23,7 @@ void ATransitionSenderActor::SendTransition(TSubclassOf<UUserWidget> loadingScre
 		return;
 	}
 
-	UGameManager* gameManager = Cast<UGameManager>(UGameplayStatics::GetGameInstance(world));
+	UMainGameInstance* gameManager = Cast<UMainGameInstance>(UGameplayStatics::GetGameInstance(world));
 
 	if (!gameManager)
 	{

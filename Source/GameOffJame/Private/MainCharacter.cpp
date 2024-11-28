@@ -8,6 +8,7 @@
 #include "Camera\CameraComponent.h"
 #include "DialogueConsumer.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Inventory/InventorySystem.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -24,13 +25,15 @@ AMainCharacter::AMainCharacter()
 	DialogueConsumerComponent = CreateDefaultSubobject<UDialogueConsumer>("Dialogue Consumer");
 
 	//OnCharacterMovementUpdated.AddDynamic(this, &AMainCharacter::RotationLerp); Not working, not sure why.
+
+	InventorySystemComponent = CreateDefaultSubobject<UInventorySystem>("Inventory System");
 }
 
 // Called when the game starts or when spawned
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -84,7 +87,6 @@ void AMainCharacter::RotationLerp(float delta, FVector oldLocation, FVector oldV
 {
 	FVector newVel = GetVelocity().GetSafeNormal();
 	USkeletalMeshComponent* mesh = GetMesh();
-
 	UE_LOG(LogTemp, Warning, TEXT("Vel: %s"), *newVel.ToCompactString())
 
 	if (newVel.Length() > 0.01f)
@@ -105,5 +107,13 @@ void AMainCharacter::RotationLerp(float delta, FVector oldLocation, FVector oldV
 		UE_LOG(LogTemp, Warning, TEXT("rot: %s"), *newRot.ToCompactString())
 
 		mesh->SetRelativeRotation(newRot);
+	}
+}
+
+void AMainCharacter::ToggleInventory_Implementation(bool interacting)
+{
+	if (InventorySystemComponent)
+	{
+		InventorySystemComponent->ToggleInventory();
 	}
 }

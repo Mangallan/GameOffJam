@@ -44,6 +44,7 @@ void AInputController::SetupInputs()
 		inputComponent->BindAction(FallInput, ETriggerEvent::Triggered, this, &AInputController::SendFallInput);
 		inputComponent->BindAction(InteractInput, ETriggerEvent::Triggered, this, &AInputController::SendInteractInput);
 		inputComponent->BindAction(AnyInput, ETriggerEvent::Triggered, this, &AInputController::UpdateLastDeviceUsed);
+		inputComponent->BindAction(InventoryInput, ETriggerEvent::Triggered, this, &AInputController::SendInventoryInput);
 	}
 }
 
@@ -91,4 +92,12 @@ void AInputController::SendInteractInput(const FInputActionValue& Value)
 void AInputController::UpdateLastDeviceUsed(const FInputActionValue& Value)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Any pressed"))
+}
+
+void AInputController::SendInventoryInput(const FInputActionValue& Value)
+{
+	if (TrackedPawn && TrackedPawn->Implements<UControllable>())
+	{
+		IControllable::Execute_ToggleInventory(TrackedPawn, Value.Get<bool>());
+	}
 }

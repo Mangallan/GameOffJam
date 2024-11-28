@@ -2,7 +2,7 @@
 
 
 #include "GameplayMode.h"
-#include "GameManager.h"
+#include "MainGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "Engine.h"
@@ -20,7 +20,7 @@ void AGameplayMode::BeginPlay()
 		return;
 	}
 
-	UGameManager* gameManager = Cast<UGameManager>(UGameplayStatics::GetGameInstance(world));
+	UMainGameInstance* gameManager = Cast<UMainGameInstance>(UGameplayStatics::GetGameInstance(world));
 
 	if (!gameManager)
 	{
